@@ -1,0 +1,110 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>🏠 ข้อมูลบ้านเช่า</h1>
+        <a href="{{ route('properties.create') }}" class="btn btn-primary btn-lg">
+            ➕ เพิ่มบ้านเช่า
+        </a>
+    </div>
+
+    <!-- ข้อความสำเร็จ -->
+    @if($message = Session::get('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ $message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    <!-- ปุ่มค้นหา -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" action="{{ route('properties.index') }}" class="row g-3">
+                <div class="col-md-10">
+                    <input type="text" name="search" class="form-control form-control-lg" 
+                           placeholder="🔍 ค้นหาจากรหัสบ้าน/ชื่อ/ที่อยู่" 
+                           value="{{ request('search') }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-info btn-lg w-100">ค้นหา</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ตารางข้อมูลบ้านเช่า -->
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 10%;">รหัสบ้าน</th>
+                    <th style="width: 15%;">ชื่อบ้าน</th>
+                    <th style="width: 20%;">ที่อยู่</th>
+                    <th style="width: 10%;">ราคาเช่า</th>
+                    <th style="width: 10%;">ประเภท</th>
+                    <th style="width: 10%;">สถานะ</th>
+                    <th style="width: 15%;">การดำเนินการ</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($properties as $property)
+                    <tr>
+                        <td>
+                            <span class="badge bg-primary fs-6">{{ $property->code }}</span>
+                        </td>
+                        <td>
+                            <strong>{{ $property->name }}</strong>
+                        </td>
+                        <td>
+                            {{ $property->address }}
+                            @if($property->moo)
+                                <br><small class="text-muted">หมู่ {{ $property->moo }}</small>
+                            @endif
+                        </td>
+                        <td>
+                            {{ number_format($property->price, 2) }} ฿
+                        </td>
+                        <td>{{ $property->type }}</td>
+                        <td>
+                            @if($property->status === 'vacant')
+                                <span class="badge bg-success">🔓 ว่าง</span>
+                            @else
+                                <span class="badge bg-danger">🔒 เช่าแล้ว</span>
+                            @endif
+                        </td>
+                        <td>
+                            <a href="{{ route('properties.edit', $property) }}" class="btn btn-sm btn-warning">
+                                ✏️ แก้ไข
+                            </a>
+                            
+                            <form method="POST" action="{{ route('properties.destroy', $property) }}" 
+                                  style="display:inline;" 
+                                  onsubmit="return confirm('ยืนยันการลบข้อมูล?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    🗑️ ลบ
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-5">
+                            <h5>ไม่มีข้อมูลบ้านเช่า</h5>
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {{ $properties->links('pagination::bootstrap-5') }}
+        </ul>
+    </nav>
+</div>
+@endsection
