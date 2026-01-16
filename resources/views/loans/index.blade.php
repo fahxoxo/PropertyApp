@@ -131,27 +131,27 @@
             <tbody>
                 @forelse($loans as $loan)
                     <tr>
-                        <td>
+                        <td data-label="รหัสสัญญา">
                             <span class="badge bg-primary">{{ $loan->code }}</span>
                         </td>
-                        <td>
+                        <td data-label="ลูกค้า">
                             <strong class="d-block">{{ $loan->customer->first_name }} {{ $loan->customer->last_name }}</strong>
                             <small class="text-muted">{{ $loan->customer->code }}</small>
                         </td>
-                        <td>
+                        <td data-label="เงินต้น">
                             <strong class="text-danger d-block">{{ number_format($loan->principal_remaining, 2) }} ฿</strong>
                             <small class="text-muted">เบิก: {{ number_format($loan->principal, 2) }} ฿</small>
                         </td>
-                        <td class="d-none d-lg-table-cell">{{ $loan->interest_rate }}%</td>
-                        <td class="d-none d-lg-table-cell">{{ $loan->duration }}</td>
-                        <td class="d-none d-xl-table-cell">
+                        <td class="d-none d-lg-table-cell" data-label="ดอกเบี้ย">{{ $loan->interest_rate }}%</td>
+                        <td class="d-none d-lg-table-cell" data-label="ระยะเวลา">{{ $loan->duration }}</td>
+                        <td class="d-none d-xl-table-cell" data-label="ประเภท">
                             @if($loan->type === 'ขายฝาก')
                                 <span class="badge bg-warning text-dark">🏪</span>
                             @else
                                 <span class="badge bg-danger">🏦</span>
                             @endif
                         </td>
-                        <td>
+                        <td data-label="สถานะ">
                             @if($loan->status === 'อยู่ในสัญญา')
                                 <span class="badge bg-success">✅</span>
                             @elseif($loan->status === 'ฟ้องร้อง')
@@ -164,7 +164,7 @@
                                 <span class="badge bg-dark">❌</span>
                             @endif
                         </td>
-                        <td>
+                        <td data-label="การดำเนินการ">
                             <div class="btn-group btn-group-sm" role="group">
                                 <a href="{{ route('loans.edit', $loan) }}" class="btn btn-warning" title="แก้ไข">
                                     ✏️

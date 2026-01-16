@@ -33,8 +33,68 @@
         </div>
     </div>
 
-    <!-- ตารางข้อมูลลูกค้า -->
-    <div class="table-responsive">
+    <!-- Mobile Card View (< 768px) -->
+    <div class="d-md-none">
+        @forelse($customers as $customer)
+            <div class="card mb-3">
+                <div class="card-body p-3">
+                    <!-- Code -->
+                    <div class="mb-3">
+                        <span class="badge bg-primary fs-6">{{ $customer->code }}</span>
+                    </div>
+
+                    <!-- Full Name -->
+                    <div class="mb-3">
+                        <h6 class="mb-1">ชื่อ - นามสกุล</h6>
+                        <p class="mb-0"><strong>{{ $customer->first_name }} {{ $customer->last_name }}</strong></p>
+                    </div>
+
+                    <!-- Nickname -->
+                    @if($customer->nickname)
+                        <div class="mb-3">
+                            <h6 class="mb-1">ชื่อเล่น</h6>
+                            <p class="mb-0"><strong>{{ $customer->nickname }}</strong></p>
+                        </div>
+                    @endif
+
+                    <!-- Phone -->
+                    <div class="mb-3">
+                        <h6 class="mb-1">เบอร์โทรศัพท์</h6>
+                        <p class="mb-0"><strong>{{ $customer->phone }}</strong></p>
+                    </div>
+
+                    <!-- ID Card -->
+                    <div class="mb-3">
+                        <h6 class="mb-1">เลขบัตรประชาชน</h6>
+                        <p class="mb-0"><strong>{{ $customer->id_card }}</strong></p>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="d-grid gap-2">
+                        <a href="{{ route('customers.edit', $customer) }}" class="btn btn-sm btn-warning">
+                            ✏️ แก้ไข
+                        </a>
+                        <form method="POST" action="{{ route('customers.destroy', $customer) }}" 
+                              style="display:block;" 
+                              onsubmit="return confirm('ยืนยันการลบข้อมูล?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger w-100">
+                                🗑️ ลบ
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="alert alert-info text-center py-5">
+                <h5>ไม่มีข้อมูลลูกค้า</h5>
+            </div>
+        @endforelse
+    </div>
+
+    <!-- Desktop Table View (>= 768px) -->
+    <div class="d-none d-md-block table-responsive">
         <table class="table table-hover table-striped">
             <thead class="table-dark">
                 <tr>
@@ -49,16 +109,16 @@
             <tbody>
                 @forelse($customers as $customer)
                     <tr>
-                        <td>
+                        <td data-label="รหัสลูกค้า">
                             <span class="badge bg-primary fs-6">{{ $customer->code }}</span>
                         </td>
-                        <td>
+                        <td data-label="ชื่อ - นามสกุล">
                             <strong>{{ $customer->first_name }} {{ $customer->last_name }}</strong>
                         </td>
-                        <td>{{ $customer->nickname ?? '-' }}</td>
-                        <td>{{ $customer->phone }}</td>
-                        <td>{{ $customer->id_card }}</td>
-                        <td>
+                        <td data-label="ชื่อเล่น">{{ $customer->nickname ?? '-' }}</td>
+                        <td data-label="เบอร์โทรศัพท์">{{ $customer->phone }}</td>
+                        <td data-label="เลขบัตรประชาชน">{{ $customer->id_card }}</td>
+                        <td data-label="การดำเนินการ">
                             <a href="{{ route('customers.edit', $customer) }}" class="btn btn-sm btn-warning">
                                 ✏️ แก้ไข
                             </a>

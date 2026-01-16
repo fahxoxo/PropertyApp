@@ -126,32 +126,32 @@
             <tbody>
                 @forelse($transactions as $tx)
                     <tr>
-                        <td>
+                        <td data-label="ใบเสร็จ">
                             <span class="badge bg-primary">{{ $tx->receipt_number }}</span>
                         </td>
-                        <td class="d-none d-lg-table-cell">
+                        <td class="d-none d-lg-table-cell" data-label="รายการ">
                             @if($tx->payable_type === 'App\Models\RentalContract')
                                 <span class="badge bg-success">🏠 สัญญาเช่า</span>
                             @elseif($tx->payable_type === 'App\Models\LoanContract')
                                 <span class="badge bg-warning text-dark">💰 ขายฝาก/จำนอง</span>
                             @endif
                         </td>
-                        <td>
+                        <td data-label="ลูกค้า">
                             <strong class="d-block">{{ $tx->payable->customer->first_name }} {{ $tx->payable->customer->last_name }}</strong>
                             <small class="text-muted">{{ $tx->payable->customer->phone }}</small>
                         </td>
-                        <td class="text-end">
+                        <td data-label="จำนวนเงิน" class="text-end">
                             <strong>{{ number_format($tx->amount, 2) }} ฿</strong>
                         </td>
-                        <td class="d-none d-lg-table-cell">
+                        <td class="d-none d-lg-table-cell" data-label="วิธีชำระ">
                             @if($tx->payment_method === 'เงินสด')
                                 <span class="badge bg-success">💵 เงินสด</span>
                             @else
                                 <span class="badge bg-info">🏦 โอน</span>
                             @endif
                         </td>
-                        <td class="d-none d-xl-table-cell">{{ \Carbon\Carbon::parse($tx->payment_date)->format('d/m/Y') }}</td>
-                        <td>
+                        <td class="d-none d-xl-table-cell" data-label="วันที่">{{ \Carbon\Carbon::parse($tx->payment_date)->format('d/m/Y') }}</td>
+                        <td data-label="การดำเนินการ">
                             <div class="btn-group btn-group-sm" role="group">
                                 <a href="{{ route('finance.receipt', $tx->id) }}" class="btn btn-info" target="_blank" title="PDF">
                                     📄

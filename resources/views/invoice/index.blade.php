@@ -61,7 +61,115 @@
                 <div class="card-header bg-info text-white">
                     <h5 class="mb-0">ใบแจ้งหนี้เดือน {{ \Carbon\Carbon::create($year, $month, 1)->translatedFormat('F') }} {{ $year + 543 }}</h5>
                 </div>
-                <div class="table-responsive">
+
+                <!-- Mobile Card View (< 768px) -->
+                <div class="d-md-none p-3">
+                    @forelse($invoices as $invoice)
+                        <div class="card mb-3">
+                            <div class="card-body p-3">
+                                <!-- Invoice Number and Type -->
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <span class="badge bg-primary fs-6">{{ $invoice->invoice_number }}</span>
+                                    @switch($invoice->type)
+                                        @case('rental')
+                                            <span class="badge bg-success">🏠 บ้านเช่า</span>
+                                            @break
+                                        @case('loan_sale')
+                                            <span class="badge bg-warning">💰 ขายฝาก</span>
+                                            @break
+                                        @case('loan_mortgage')
+                                            <span class="badge bg-danger">🏦 จำนอง</span>
+                                            @break
+                                        @case('loan')
+                                            <span class="badge bg-info">📊 เงินกู้</span>
+                                            @break
+                                    @endswitch
+                                </div>
+
+                                <!-- Status Badge -->
+                                <div class="mb-3">
+                                    @switch($invoice->status)
+                                        @case('draft')
+                                            <span class="badge bg-secondary">📝 ร่าง</span>
+                                            @break
+                                        @case('issued')
+                                            <span class="badge bg-primary">📤 ออกแล้ว</span>
+                                            @break
+                                        @case('paid')
+                                            <span class="badge bg-success">✅ ชำระแล้ว</span>
+                                            @break
+                                        @case('overdue')
+                                            <span class="badge bg-danger">⚠️逾期</span>
+                                            @break
+                                    @endswitch
+                                </div>
+
+                                <!-- Customer Info -->
+                                @if($invoice->billable && $invoice->billable->customer)
+                                    <div class="mb-3">
+                                        <h6 class="mb-1">ลูกค้า</h6>
+                                        <p class="mb-1"><strong>{{ $invoice->billable->customer->first_name }} {{ $invoice->billable->customer->last_name }}</strong></p>
+                                        <small class="text-muted">{{ $invoice->billable->customer->code }}</small>
+                                    </div>
+                                @endif
+
+                                <!-- Contract Info -->
+                                <div class="mb-3">
+                                    <h6 class="mb-1">ข้อมูลสัญญา</h6>
+                                    <p class="mb-0"><strong>{{ $invoice->billable->code ?? 'N/A' }}</strong></p>
+                                </div>
+
+                                <!-- Amount -->
+                                <div class="mb-3">
+                                    <h6 class="mb-1">จำนวนเงิน</h6>
+                                    <p class="mb-1"><strong class="text-primary fs-5">{{ number_format($invoice->amount, 2) }} ฿</strong></p>
+                                    <small class="text-muted">
+                                        @if($invoice->type === 'rental')
+                                            ราคาเช่า/เดือน
+                                        @else
+                                            ดอกเบี้ย/เดือน
+                                        @endif
+                                    </small>
+                                </div>
+
+                                <!-- Due Date -->
+                                <div class="mb-3">
+                                    <h6 class="mb-1">วันครบกำหนด</h6>
+                                    <p class="mb-0"><strong>{{ $invoice->due_date ? $invoice->due_date->format('d/m/Y') : '-' }}</strong></p>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="d-grid gap-2">
+                                    <a href="{{ route('invoice.show', $invoice) }}" class="btn btn-sm btn-info">
+                                        👁️ ดู
+                                    </a>
+                                    @if($invoice->outstanding_balance > 0)
+                                        <a href="{{ route('invoice.payment', $invoice) }}" class="btn btn-sm btn-success">
+                                            💳 รับชำระ
+                                        </a>
+                                    @endif
+                                    <a href="{{ route('invoice.edit', $invoice) }}" class="btn btn-sm btn-warning">
+                                        ✏️ แก้ไข
+                                    </a>
+                                    <form action="{{ route('invoice.destroy', $invoice) }}" method="POST" style="display:block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger w-100" onclick="return confirm('ยืนยันการลบ?')">
+                                            🗑️ ลบ
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="alert alert-info text-center py-4">
+                            ไม่พบใบแจ้งหนี้ในเดือนนี้
+                        </div>
+                    @endforelse
+                </div>
+
+                <!-- Desktop Table View (>= 768px) -->
+                <div class="d-none d-md-block table-responsive">
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>

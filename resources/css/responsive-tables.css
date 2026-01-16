@@ -1,0 +1,188 @@
+/* Responsive Table Styles - Mobile View (< 768px) */
+
+@media (max-width: 767.98px) {
+    /* Hide table headers on mobile */
+    .table-responsive thead,
+    .table-responsive thead th {
+        display: none;
+    }
+
+    /* Convert table to card layout */
+    .table-responsive table,
+    .table-responsive tbody,
+    .table-responsive tr {
+        display: block;
+        width: 100%;
+    }
+
+    /* Style each row as a card */
+    .table-responsive tbody tr {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        background-color: #fff;
+    }
+
+    /* Alternate row background */
+    .table-responsive tbody tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    /* Style table cells as flex items */
+    .table-responsive tbody td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border: none;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    /* Remove bottom border from last td in row */
+    .table-responsive tbody td:last-child {
+        border-bottom: none;
+    }
+
+    /* Add label before each td using data-label attribute */
+    .table-responsive tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #495057;
+        margin-right: 1rem;
+        min-width: 120px;
+        word-break: break-word;
+    }
+
+    /* Special handling for badge elements */
+    .table-responsive tbody td .badge {
+        margin-left: auto;
+    }
+
+    /* Action buttons container */
+    .table-responsive tbody td[data-label="การดำเนินการ"],
+    .table-responsive tbody td[data-label="Action"] {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .table-responsive tbody td[data-label="การดำเนินการ"]::before,
+    .table-responsive tbody td[data-label="Action"]::before {
+        flex-basis: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .table-responsive tbody td[data-label="การดำเนินการ"] .btn,
+    .table-responsive tbody td[data-label="Action"] .btn {
+        flex: 1;
+        min-width: 100px;
+        font-size: 0.75rem;
+        padding: 0.35rem 0.5rem;
+    }
+
+    /* Name/Title styling - show as full width at top */
+    .table-responsive tbody td[data-label="ชื่อบ้าน"],
+    .table-responsive tbody td[data-label="ชื่อเช่าบุคคล"],
+    .table-responsive tbody td[data-label="ชื่อสัญญา"],
+    .table-responsive tbody td[data-label="Name"],
+    .table-responsive tbody td[data-label="Title"] {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .table-responsive tbody td[data-label="ชื่อบ้าน"]::before,
+    .table-responsive tbody td[data-label="ชื่อเช่าบุคคล"]::before,
+    .table-responsive tbody td[data-label="ชื่อสัญญา"]::before,
+    .table-responsive tbody td[data-label="Name"]::before,
+    .table-responsive tbody td[data-label="Title"]::before {
+        margin-bottom: 0.5rem;
+        min-width: auto;
+    }
+
+    /* Price/Amount styling */
+    .table-responsive tbody td[data-label="ราคาเช่า"],
+    .table-responsive tbody td[data-label="จำนวนเงิน"],
+    .table-responsive tbody td[data-label="ยอดชำระ"],
+    .table-responsive tbody td[data-label="Price"],
+    .table-responsive tbody td[data-label="Amount"] {
+        justify-content: space-between;
+    }
+
+    .table-responsive tbody td[data-label="ราคาเช่า"] strong,
+    .table-responsive tbody td[data-label="จำนวนเงิน"] strong,
+    .table-responsive tbody td[data-label="ยอดชำระ"] strong,
+    .table-responsive tbody td[data-label="Price"] strong,
+    .table-responsive tbody td[data-label="Amount"] strong {
+        text-align: right;
+    }
+
+    /* Status badge styling */
+    .table-responsive tbody td[data-label="สถานะ"],
+    .table-responsive tbody td[data-label="Status"] {
+        justify-content: space-between;
+    }
+
+    /* Empty state styling */
+    .table-responsive tbody tr td[colspan] {
+        display: block;
+        padding: 2rem 1rem;
+        text-align: center;
+    }
+
+    .table-responsive tbody tr td[colspan]::before {
+        display: none;
+    }
+
+    /* Improve readability for nested content */
+    .table-responsive tbody td small {
+        display: block;
+        margin-top: 0.25rem;
+    }
+
+    /* Form elements in tables */
+    .table-responsive tbody td form {
+        display: flex;
+        gap: 0.25rem;
+    }
+
+    .table-responsive tbody td form [type="submit"] {
+        flex: 1;
+    }
+}
+
+/* Tablet and Desktop (>= 768px) - Keep original table styles */
+@media (min-width: 768px) {
+    .table-responsive table {
+        font-size: 1rem;
+    }
+
+    .table-responsive thead {
+        display: table-header-group;
+    }
+
+    .table-responsive tbody td::before {
+        display: none;
+    }
+
+    .table-responsive tbody td {
+        display: table-cell;
+        border: inherit;
+        padding: inherit;
+    }
+
+    .table-responsive tbody tr {
+        display: table-row;
+        border: none;
+        padding: 0;
+        margin: 0;
+        box-shadow: none;
+        background-color: transparent;
+    }
+
+    .table-responsive tbody tr:nth-child(even) {
+        background-color: transparent;
+    }
+}
